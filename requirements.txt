@@ -1,3 +1,4 @@
+python==3.7
 autopy==4.0.0
 mediapipe==0.9.0.1
 numpy==1.21.6
