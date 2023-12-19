@@ -32,12 +32,11 @@ class handDetector():
         self.lmListR = []
         if self.results.multi_hand_landmarks:
             for hand_no, hand_landmarks in enumerate(self.results.multi_hand_landmarks):
-                # Find Z
-                # print("hand index:", hand_no,"hand name from handedness:", self.results.multi_handedness[hand_no].classification[0].label, "hand index from handedness: ", self.results.multi_handedness[hand_no].classification[0].index)  # first hand of detection will be labelled as index 0
-                # for i in range(21):  # for loop i as a index for each landmark points
-                #     print(self.mpHands.HandLandmark(i).name, self.mpHands.HandLandmark(i).value) # from wrist to pinky_tip
-                #     print(f'{hand_landmarks.landmark[self.mpHands.HandLandmark(i).value]}')
-                # myHand = self.results.multi_hand_landmarks[0]
+                print("hand index:", hand_no,"hand name from handedness:", self.results.multi_handedness[hand_no].classification[0].label, "hand index from handedness: ", self.results.multi_handedness[hand_no].classification[0].index)  # first hand of detection will be labelled as index 0
+                for i in range(21):  # for loop i as a index for each landmark points
+                    print(self.mpHands.HandLandmark(i).name, self.mpHands.HandLandmark(i).value) # from wrist to pinky_tip
+                    print(f'{hand_landmarks.landmark[self.mpHands.HandLandmark(i).value]}')
+                myHand = self.results.multi_hand_landmarks[0]
                 for id, lm in enumerate(hand_landmarks.landmark):
                     # print(self.results.multi_handedness[0].classification[0].label, "id is", id, lm)
                     h, w, c = img.shape
