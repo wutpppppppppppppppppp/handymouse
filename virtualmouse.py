@@ -37,7 +37,7 @@ while True:
 
     # 3. Check which fingers are up
     fingersL, fingersR = detector.fingersUp()
-    print(fingersL, fingersR)  # [0, 0, 0, 0, 0]
+    # print(fingersL, fingersR)  # [0, 0, 0, 0, 0]
 
     if fingersR[1] == 1 and fingersR[2] == 0 and fingersR[3] == 0 and fingersR[4] == 0: # moving mode
 
@@ -127,7 +127,7 @@ while True:
         pag.mouseUp(button='right')
         pag.mouseUp(button='middle')
     # cv2.rectangle(img, (frameR, frameR), (wCam - frameR, hCam - frameR), (255, 0, 255), 2)
-    
+
 
     # 11. Frame Rate
     cTime = time.time()
