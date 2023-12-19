@@ -32,6 +32,7 @@ class handDetector():
         self.lmListR = []
         if self.results.multi_hand_landmarks:
             for hand_no, hand_landmarks in enumerate(self.results.multi_hand_landmarks):
+                # Find Z
                 # print("hand index:", hand_no,"hand name from handedness:", self.results.multi_handedness[hand_no].classification[0].label, "hand index from handedness: ", self.results.multi_handedness[hand_no].classification[0].index)  # first hand of detection will be labelled as index 0
                 # for i in range(21):  # for loop i as a index for each landmark points
                 #     print(self.mpHands.HandLandmark(i).name, self.mpHands.HandLandmark(i).value) # from wrist to pinky_tip
