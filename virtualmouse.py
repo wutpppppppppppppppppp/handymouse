@@ -127,7 +127,7 @@ while True:
         pag.mouseUp(button='right')
         pag.mouseUp(button='middle')
     # cv2.rectangle(img, (frameR, frameR), (wCam - frameR, hCam - frameR), (255, 0, 255), 2)
-
+    
 
     # 11. Frame Rate
     cTime = time.time()
