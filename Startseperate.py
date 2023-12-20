@@ -27,35 +27,46 @@ class handDetector():
     def findPosition(self, img, draw=True):
         xList = []
         yList = []
+        # add up the z axis (far and near the camera)
+        # zList = []
         # bbox = []
         self.lmListL = []
         self.lmListR = []
         if self.results.multi_hand_landmarks:
             for hand_no, hand_landmarks in enumerate(self.results.multi_hand_landmarks):
-                print("hand index:", hand_no,"hand name from handedness:", self.results.multi_handedness[hand_no].classification[0].label, "hand index from handedness: ", self.results.multi_handedness[hand_no].classification[0].index)  # first hand of detection will be labelled as index 0
-                for i in range(21):  # for loop i as a index for each landmark points
-                    print(self.mpHands.HandLandmark(i).name, self.mpHands.HandLandmark(i).value) # from wrist to pinky_tip
-                    print(f'{hand_landmarks.landmark[self.mpHands.HandLandmark(i).value]}')
-                myHand = self.results.multi_hand_landmarks[0]
+                # print("hand index:", hand_no,"hand name from handedness:", self.results.multi_handedness[hand_no].classification[0].label, "hand index from handedness: ", self.results.multi_handedness[hand_no].classification[0].index)  # first hand of detection will be labelled as index 0
+                # for i in range(21):  # for loop i as a index for each landmark points
+                #     print(self.mpHands.HandLandmark(i).name, self.mpHands.HandLandmark(i).value) # from wrist to pinky_tip
+                #     print(f'{hand_landmarks.landmark[self.mpHands.HandLandmark(i).value]}')
+                # myHand = self.results.multi_hand_landmarks[0]
+                
                 for id, lm in enumerate(hand_landmarks.landmark):
                     # print(self.results.multi_handedness[0].classification[0].label, "id is", id, lm)
                     h, w, c = img.shape
                     cx, cy = int(lm.x * w), int(lm.y * h)
+                    # add up the cz
+                    # cx, cy, cz = int(lm.x * w), int(lm.y * h), int(lm.z * -1)
                     xList.append(cx)
                     yList.append(cy)
+                    # zList.append(cz)
+                    
                     # print(id, cx, cy)
                     hand = self.results.multi_handedness[0].classification[0].index
                     if (self.results.multi_handedness[hand_no].classification[0].label == 'Left'):
                         self.lmListL.append([id, cx, cy])
+                        # self.lmListL.append([id, cx, cy,cz])
                         # print("get left")
                     if (self.results.multi_handedness[hand_no].classification[0].label == 'Right'):
                         self.lmListR.append([id, cx, cy])
+                        # self.lmListR.append([id, cx, cy,cz])
                         # print("get right")
                     if draw:
                         cv2.circle(img, (cx, cy), 5, (255, 64, 35), cv2.FILLED)
 
                 xmin, xmax = min(xList), max(xList)
                 ymin, ymax = min(yList), max(yList)
+                # add the zmin,zmax
+                # zmin,zmax = min(zList),max(zList)
                 bbox = xmin, ymin, xmax, ymax
                 # if draw:
                 #     cv2.rectangle(img, (xmin - 20, ymin - 20), (xmax + 20, ymax + 20), (0, 255, 0), 2)
@@ -130,6 +141,34 @@ class handDetector():
         # cv2.circle(img, (cx, cy), r, (0, 0, 255), cv2.FILLED)
 
         return length, img, [x1, y1, x2, y2, cx, cy]
+    
+    def findDistanceBetweenHands(self, img, p1_left=8, p2_left=12, p1_right=8, p2_right=12, draw=True, r=15, t=3, re=255, g=0, b=255):
+        """Calculates the distance between two hands based on specified landmarks."""
+
+        if self.lmListL and self.lmListR:  # Check if both hands are detected
+            x1_left, y1_left = self.lmListL[p1_left][1:]
+            x2_left, y2_left = self.lmListL[p2_left][1:]
+            x1_right, y1_right = self.lmListR[p1_right][1:]
+            x2_right, y2_right = self.lmListR[p2_right][1:]
+
+            # Calculate midpoints of each hand's line
+            cx_left, cy_left = (x1_left + x2_left) // 2, (y1_left + y2_left) // 2
+            cx_right, cy_right = (x1_right + x2_right) // 2, (y1_right + y2_right) // 2
+
+            # Calculate distance between the midpoints
+            distance = math.hypot(cx_right - cx_left, cy_right - cy_left)
+
+            # if draw:
+            #     # Draw lines and circles for visualization
+            #     cv2.line(img, (x1_left, y1_left), (x2_left, y2_left), (re, g, b), t)
+            #     cv2.line(img, (x1_right, y1_right), (x2_right, y2_right), (re, g, b), t)
+            #     cv2.circle(img, (cx_left, cy_left), r, (255, 0, 255), cv2.FILLED)
+            #     cv2.circle(img, (cx_right, cy_right), r, (255, 0, 255), cv2.FILLED)
+
+            return distance, img
+
+        else:
+            return None, img  # Return None if both hands are not detected
 
 def main():
     pTime = 0
@@ -144,6 +183,7 @@ def main():
         # length, img, lineInfo = detector.findDistance(8, 12, img, re=255, g=208, b=42)
         length, img, lineInfo = detector.findRatio(8, 12, img, re=255, g=208, b=42)
 
+    
         # if len(lmList) != 0:
         #     print(lmList[4])
         cTime = time.time()

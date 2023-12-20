@@ -32,14 +32,17 @@ while True:
 
     # 2. Get the tip of the index
     if len(lmListR) != 0:
-        x1, y1 = lmListR[8][1:]
+        x1, y1 = lmListR[8][1:] # fix this with line 56,60 in startseperate.py
         # print(x1, y1)
 
     # 3. Check which fingers are up
     fingersL, fingersR = detector.fingersUp()
     # print(fingersL, fingersR)  # [0, 0, 0, 0, 0]
 
-    if fingersR[1] == 1 and fingersR[2] == 0 and fingersR[3] == 0 and fingersR[4] == 0: # moving mode
+    distance, img = detector.findDistanceBetweenHands(img)
+    # print("Distance between hands:", distance)
+
+    if fingersR[1] == 1 and fingersR[2:] == [0, 0, 0]: # moving mode
 
         # 5. Convert Coordinates
         x3 = np.interp(x1, (frameR, wCam - frameR), (0, wScr))
@@ -59,7 +62,7 @@ while True:
         plocX, plocY = clocX, clocY
 
         # 8. Both Index and middle fingers are up : Clicking Left Mode
-        if fingersL[0] == 1 and fingersL[1] == 1 and fingersL[2] == 1 and fingersL[3] == 0 and fingersL[4] == 0:
+        if fingersL[0:4]==[1,1,1,0,0]:
             # 9. Find distance between fingers
             length, img, lineInfo = detector.findRatio(8, 12, img, re=255, g=208, b=42)
             # print(lineInfo)
@@ -78,7 +81,8 @@ while True:
                 clickFlag = 0
 
         # 9. Thumb, index, and middle fingers are up : right click
-        if fingersL[0] == 0 and fingersL[1] == 1 and fingersL[2] == 1 and fingersL[3] == 0 and fingersL[4] == 0:
+        # if fingersL[0] == 0 and fingersL[1] == 1 and fingersL[2] == 1 and fingersL[3] == 0 and fingersL[4] == 0:
+        if fingersL[0:4] == [0,1,1,0,0]:
             # 9.1. Find distance between fingers
             length, img, lineInfo = detector.findRatio(8, 12, img, re=255, g=208, b=42)
             #print("Right Click : its length is ", length)
@@ -95,8 +99,7 @@ while True:
                 clickFlag = 0
 
         # 10. index, middle, and ring fingers are up : middle click
-        if fingersL[0] == 1 and fingersL[1] == 1 and fingersL[2] == 1 and fingersL[3] == 1 and fingersL[4] == 0:
-
+        if fingersL[0:4] == [1,1,1,1,0]:
             # 10.1. Find distance between fingers
             length, img, lineInfo = detector.findRatio(8, 12, img, re=255, g=208, b=42)
             #   print("Middle click : both length are ", length)
@@ -113,7 +116,7 @@ while True:
                 pag.mouseUp(button='middle')
                 clickFlag = 0
 
-    elif fingersR[1] == 1 and fingersR[2] == 1 and fingersR[3] == 0 and fingersR[4] == 0:
+    elif fingersR[1:3] == [1, 1] and not any(fingersR[3:]):
         cv2.putText(img, "Scrolling", (45, 50), cv2.FONT_HERSHEY_PLAIN, 1, (0, 252, 0), 2)
         if fingersL[1] == 1 and fingersL[2] == 1 and fingersL[3] == 0 and fingersL[4] == 0:
             pag.scroll(30)
@@ -122,7 +125,7 @@ while True:
             cv2.putText(img, "DOWN", (45, 70), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 2)
             pag.scroll(-30)
 
-    elif fingersR[0] == 0 and fingersR[1] == 1 and fingersR[2] == 1 and fingersR[3] == 1 and fingersR[4] == 1:
+    elif all(fingersR[1:]) and not fingersR[0]:
         pag.mouseUp(button='left')
         pag.mouseUp(button='right')
         pag.mouseUp(button='middle')
@@ -134,6 +137,7 @@ while True:
     fps = 1 / (cTime - pTime)
     pTime = cTime
     cv2.putText(img, str(int(fps)), (20, 50), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0), 2)
+    
     # 12. Display
     cv2.imshow("Image", img)
     esc = cv2.waitKey(1) & 0xff #  if pressed esc
