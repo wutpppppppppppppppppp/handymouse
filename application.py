@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import module as htm
+import HandModule as htm
 import time
 import autopy
 import pyautogui as pag
