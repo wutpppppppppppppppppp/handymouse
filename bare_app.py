@@ -7,8 +7,7 @@ import pyautogui as pag
 
 
 # Constants for the video capture and frame reduction
-wCam, hCam = 640, 480
-# wCam, hCam = 1280, 720 but reduce fps
+wCam, hCam = 640, 480 # wCam, hCam = 1280, 720 but reduce fps
 frameR = 100  # Frame Reduction
 smoothening = 7
 

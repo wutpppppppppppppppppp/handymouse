@@ -40,3 +40,16 @@ pip install requirements.txt
 git clone https://github.com/wutpppppppppppppppppp/handymouse.git
 cd handymouse
 ```
+
+## Usage
+
+Right hand and left hand visible in camera view.
+Right index finger will be controlling the cursor movement. Left hand finger's combination will activate mouse's features.
+
+## Screenshots
+
+![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+
+![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+
+![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)

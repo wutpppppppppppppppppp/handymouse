@@ -6,7 +6,6 @@ import cv2
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QThread
 import numpy as np
 import HandModule as htm
-import time
 import autopy
 import pyautogui as pag
 
@@ -162,7 +161,7 @@ class App(QWidget):
         self.image_label = QLabel(self)
         self.image_label.resize(self.disply_width, self.display_height)
         # create a text label
-        self.textLabel = QLabel('Put Your Hands up')
+        self.textLabel = QLabel('Right hand for Moving, Left hand for Clicking')
 
         # create a vertical box layout and add the two labels
         vbox = QVBoxLayout()
