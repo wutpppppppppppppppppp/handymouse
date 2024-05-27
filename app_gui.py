@@ -48,7 +48,7 @@ class VideoThread(QThread):
 
                 # 3. Check which fingers are up
                 fingersL, fingersR = detector.fingersUp()
-                print(fingersL, fingersR)  # [0, 0, 0, 0, 0]
+                # print(fingersL, fingersR)  # [0, 0, 0, 0, 0]
 
                 distance, img = detector.findDistanceBetweenHands(img)
                 # print("Distance between hands:", distance)
@@ -76,7 +76,7 @@ class VideoThread(QThread):
                         # 9. Find distance between fingers
                         length, img, lineInfo = detector.findRatio(8, 12, img, re=255, g=208, b=42)
                         # print(lineInfo)
-                        print("Left Click : its length is ", length)
+                        # print("Left Click : its length is ", length)
                         cv2.putText(img, "Left Click", (45, 70), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 2)
 
                         # 10. Click mouse if distance short
